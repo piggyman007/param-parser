@@ -1,6 +1,6 @@
 {
   "name": "param-parser",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "parse and validate parameter",
   "main": "index.js",
   "scripts": {
