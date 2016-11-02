@@ -74,6 +74,18 @@ module.exports = {
     })
     return param
   },
+  _assignDefaultValue(param, specKeys, defaultValue) {
+    const result = param
+
+    for (const specKey of specKeys) {
+      if (defaultValue && result[specKey] === undefined && defaultValue[specKey] !== undefined) {
+        // assign default value
+        result[specKey] = defaultValue[specKey]
+      }
+    }
+
+    return result
+  },
   /**
    * parse param or throw error
    * 
@@ -117,6 +129,7 @@ module.exports = {
         throw new ValidateError(allMissed)
       }
       param = this._removeUnnecessaryKeys(param, _.keys(specs))
+      param = this._assignDefaultValue(param, _.keys(specs), defaultValue)
       const failed = _.compact((() => {
         const results = []
         const keys = Object.keys(specs)

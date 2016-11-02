@@ -4,6 +4,30 @@ const expect = require('chai').expect
 const parser = require('..')
 
 describe('param-parser', () => {
+  it('Should assign default values correctly', (done) => {
+    const specs = { a: ['required'], b: [], c: [] }
+    const input = { a: 'test', b: 'test' }
+    const defaultValue = { b: 'b default', c: 'c default' }
+
+    const expectedParam = { a: 'test', b: 'test', c: 'c default' }
+
+    const param = parser.parse(input, specs, defaultValue)
+    expect(param).eql(expectedParam)
+    
+    done()
+  })
+
+  it('Should remove parameters that are not defined in specs', (done) => {
+    const specs = { a: ['required'] }
+    const input = { a: 'test', b: 'test', c: 'test' }
+    const expectedParam = { a: 'test' }
+
+    const param = parser.parse(input, specs)
+    expect(param).eql(expectedParam)
+    
+    done()
+  })
+
   it('Should parse required param passed', (done) => {
     const specs = { a: ['required'] }
     const input = { a: 'test' }
