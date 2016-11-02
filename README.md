@@ -99,6 +99,40 @@ const specs = {
 }
 ```
 
+* parameter that is not in the specs will be removed, e.g., 
+
+```javascript
+// define specs
+const specs = {
+    mobile_no: [ 'required', /^\d{10}$/ ],
+    gender: [ 'required' ],
+    language: [],
+}
+
+// input parameters
+const input = {
+    mobile_no: '1234567890',
+    gender: 'M',
+    lanauge: 'EN',
+    dummy1: 'dummy1',
+    dummy2: 'dummy2'
+}
+
+const param = parser.parse(input, specs) // parse input
+
+/** will print
+  * {
+  *     mobile_no: '1234567890',
+  *     gender: 'M',
+  *     lanauge: 'EN'
+  * }
+  * 
+  * note that dummy1 and dummy2 are removed
+  * because they are not defined in specs
+  */
+console.log(param)
+```
+
 License
 ----
 
