@@ -158,4 +158,19 @@ describe('param-parser', () => {
     
     done()
   })
+
+  it('Should parse required param with custom formatted function passed', (done) => {
+    function formatString(input) {
+      return `updated ${input}`
+    }
+
+    const specs = { a: ['required', formatString] }
+    const input = { a: 'a' }
+    const expectedParam = { a: 'updated a' }
+
+    const param = parser.parse(input, specs)
+    expect(param).eql(expectedParam)
+    
+    done()
+  })
 })
