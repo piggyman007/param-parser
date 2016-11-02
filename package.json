@@ -1,0 +1,32 @@
+{
+  "name": "param-parser",
+  "version": "1.0.0",
+  "description": "parse and validate parameter",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/piggyman007/param-parser.git"
+  },
+  "keywords": [
+    "parameter parser",
+    "parmeter validate",
+    "parser",
+    "validate"
+  ],
+  "author": "ALONGKORN CHETASUMON",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/piggyman007/param-parser/issues"
+  },
+  "homepage": "https://github.com/piggyman007/param-parser#readme",
+  "dependencies": {
+    "lodash": "^4.16.6"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.1.2"
+  }
+}
