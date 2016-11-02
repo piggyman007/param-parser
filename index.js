@@ -17,12 +17,12 @@ module.exports = {
       return formatMissedKeyError(key)
     }
   },
-  _removeUnnecessaryKeys(params, accept) {
+  _removeUnnecessaryKeys(param, accept) {
     const result = {}
 
-    for(const key in params) {
+    for(const key in param) {
       if (accept.indexOf(key) !== -1) {
-        result[key] = params[key]
+        result[key] = param[key]
       }
     }
 
@@ -35,9 +35,9 @@ module.exports = {
       return formatInvalidRegexError(key)
     }
   },
-  _checkNeedBy(needs, params) {
+  _checkNeedBy(needs, param) {
     return _.compact(_.map(needs, need => {
-      if (!params[need]) {
+      if (!param[need]) {
         return formatMissedKeyError(need)
       }  
     }))
@@ -51,7 +51,7 @@ module.exports = {
       catch (e) { console.log('') }
     })
   },
-  _transform(params, specs) {
+  _transform(param, specs) {
     const keys = Object.keys(specs)
     keys.forEach(key => {
       const patterns = specs[key]
@@ -63,27 +63,28 @@ module.exports = {
     keys.forEach(key => {
       const todo = _.remove(specs[key], spec => _.isFunction(spec))
       _.forEach(todo, fn => {
-        if (_.isNative(fn) && params[key] !== undefined) {
-          try { params[key] = fn(params[key]) }
-          catch(e) { params[key] = fn.apply(params[key]) }
+        if (_.isNative(fn) && param[key] !== undefined) {
+          try { param[key] = fn(param[key]) }
+          catch(e) { param[key] = fn.apply(param[key]) }
         }
-        else if (params[key] !== undefined) {
-          params[key] = fn(params[key])
+        else if (param[key] !== undefined) {
+          param[key] = fn(param[key])
         }
       })
     })
-    return params
+    return param
   },
   /**
    * parse param or throw error
    * 
-   * @param {any} params
+   * @param {any} param
    * @param {any[]} specs
+   * @param {any} defaultValue
    * @returns return param or throw error
    */
-  parse (params, specs) {
-    if (!params) {
-      params = {}
+  parse (param, specs, defaultValue) {
+    if (!param) {
+      param = {}
     }
     
     try {
@@ -93,7 +94,7 @@ module.exports = {
         keys.forEach(key => {
           const val = specs[key]
           if (val.indexOf('required') >= 0) {
-            results.push(this._checkRequired(key, params[key]))
+            results.push(this._checkRequired(key, param[key]))
           }
         })
         return results
@@ -104,8 +105,8 @@ module.exports = {
         const keys = Object.keys(specs)
         keys.forEach(key => {
           const val = specs[key]
-          if (_.findIndex(val, v => _.isArray(v)) > -1 && params[key]) {
-            results.push(this._checkNeedBy(val[_.findIndex(val, (v) => _.isArray(v))], params))
+          if (_.findIndex(val, v => _.isArray(v)) > -1 && param[key]) {
+            results.push(this._checkNeedBy(val[_.findIndex(val, (v) => _.isArray(v))], param))
           }
         })
         return results
@@ -115,20 +116,20 @@ module.exports = {
       if (!_.isEmpty(allMissed)) {
         throw new ValidateError(allMissed)
       }
-      params = this._removeUnnecessaryKeys(params, _.keys(specs))
+      param = this._removeUnnecessaryKeys(param, _.keys(specs))
       const failed = _.compact((() => {
         const results = []
         const keys = Object.keys(specs)
         keys.forEach(key => {
           const val = specs[key]
-          results.push(this._checkSpec(key, params[key], val))
+          results.push(this._checkSpec(key, param[key], val))
         })
         return results
       }).call(this))
       if (!_.isEmpty(failed)) {
         throw new ValidateError(failed)
       }
-      return this._transform(params, specs)
+      return this._transform(param, specs)
     }
     catch (err) {
       if (err && err.code === 400) {
