@@ -94,7 +94,7 @@ describe('param-parser', () => {
   })
 
   it('Should parse required param with regex and prototype passed', (done) => {
-    const specs = { a: ['required', /^en|EN|th|TH$/, String.prototype.toLocaleLowerCase] }
+    const specs = { a: ['required', /^en|EN|th|TH$/, String.prototype.toLowerCase] }
     const input = { a: 'EN' }
     const expectedParam = { a: 'en' }
 
