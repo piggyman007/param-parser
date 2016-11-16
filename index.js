@@ -117,8 +117,8 @@ module.exports = {
         const keys = Object.keys(specs)
         keys.forEach(key => {
           const val = specs[key]
-          if (_.findIndex(val, v => _.isArray(v)) > -1 && param[key]) {
-            results.push(this._checkNeedBy(val[_.findIndex(val, (v) => _.isArray(v))], param))
+          if (val.findIndex(v => Array.isArray(v)) > -1 && param[key]) {
+            results.push(this._checkNeedBy(val[val.findIndex(v => Array.isArray(v))], param))
           }
         })
         return results
