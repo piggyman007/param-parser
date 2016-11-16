@@ -29,7 +29,7 @@ module.exports = {
     return result
   },
   _checkSpec(key, val, spec) {
-    const _regex = spec[_.findIndex(spec, s => _.isRegExp(s))]
+    const _regex = spec[spec.findIndex(item => (item instanceof RegExp))]
     const regex = _regex ? _regex : /.+/
     if (val !== null && val !== undefined && val !== '' && !regex.test(val)) {
       return formatInvalidRegexError(key)
