@@ -31,7 +31,7 @@ module.exports = {
   _checkSpec(key, val, spec) {
     const _regex = spec[_.findIndex(spec, s => _.isRegExp(s))]
     const regex = _regex ? _regex : /.+/
-    if (!_.isNull(val) && !_.isUndefined(val) && !_.isEmpty(val) && !regex.test(val)) {
+    if (val !== null && val !== undefined && val !== '' && !regex.test(val)) {
       return formatInvalidRegexError(key)
     }
   },
@@ -43,7 +43,7 @@ module.exports = {
     }))
   },
   _trim(obj) {
-    if (_.isString(obj)) {
+    if (typeof(obj) === 'string') {
       return obj.trim()
     } 
     return _.each(obj, (v, k) => {
@@ -125,11 +125,11 @@ module.exports = {
       }).call(this))
       
       const allMissed = _.union(missed, need)
-      if (!_.isEmpty(allMissed)) {
+      if (allMissed.length > 0) {
         throw new ValidateError(allMissed)
       }
-      param = this._removeUnnecessaryKeys(param, _.keys(specs))
-      param = this._assignDefaultValue(param, _.keys(specs), defaultValue)
+      param = this._removeUnnecessaryKeys(param, Object.keys(specs))
+      param = this._assignDefaultValue(param, Object.keys(specs), defaultValue)
       const failed = _.compact((() => {
         const results = []
         const keys = Object.keys(specs)
@@ -139,7 +139,7 @@ module.exports = {
         })
         return results
       }).call(this))
-      if (!_.isEmpty(failed)) {
+      if (failed.length > 0) {
         throw new ValidateError(failed)
       }
       return this._transform(param, specs)
