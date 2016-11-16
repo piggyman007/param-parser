@@ -13,7 +13,7 @@ function formatInvalidRegexError(key) {
 
 module.exports = {
   _checkRequired(key, param) {
-    if (!param) {
+    if (param === null || param === undefined) {
       return formatMissedKeyError(key)
     }
   },
@@ -31,7 +31,7 @@ module.exports = {
   _checkSpec(key, val, spec) {
     const _regex = spec[_.findIndex(spec, s => _.isRegExp(s))]
     const regex = _regex ? _regex : /.+/
-    if (!_.isNull(val) && !_.isUndefined(val) && !regex.test(val)) {
+    if (!_.isNull(val) && !_.isUndefined(val) && !_.isEmpty(val) && !regex.test(val)) {
       return formatInvalidRegexError(key)
     }
   },

@@ -39,6 +39,39 @@ describe('param-parser', () => {
     done()
   })
 
+  it('Should parse required param (empty value) passed', (done) => {
+    const specs = { a: ['required'] }
+    const input = { a: '' }
+    const expectedParam = { a: '' }
+
+    const param = parser.parse(input, specs)
+    expect(param).eql(expectedParam)
+    
+    done()
+  })
+
+  it('Should parse required param (null value) failed', (done) => {
+    const specs = { a: ['required'] }
+    const input = { a: null }
+
+    try { parser.parse(input, specs) }
+    catch (e) {
+      expect(e.constructor.name).eql('ValidateError')
+      done()
+    }
+  })
+
+  it('Should parse required param (undefined value) failed', (done) => {
+    const specs = { a: ['required'] }
+    const input = { a: undefined }
+
+    try { parser.parse(input, specs) }
+    catch (e) {
+      expect(e.constructor.name).eql('ValidateError')
+      done()
+    }
+  })
+
   it('Should parse required param failed', (done) => {
     const specs = { a: ['required'] }
     const input = { }
@@ -58,6 +91,39 @@ describe('param-parser', () => {
     const specs = { a: ['required'], b: [] }
     const input = { a: 'test' }
     const expectedParam = { a: 'test' }
+
+    const param = parser.parse(input, specs)
+    expect(param).eql(expectedParam)
+    
+    done()
+  })
+
+  it('Should parse optional param (empty value) passed', (done) => {
+    const specs = { a:[] }
+    const input = { a: '' }
+    const expectedParam = { a: '' }
+
+    const param = parser.parse(input, specs)
+    expect(param).eql(expectedParam)
+    
+    done()
+  })
+
+  it('Should parse optional param (null value) passed', (done) => {
+    const specs = { a:[] }
+    const input = { a: null }
+    const expectedParam = { a: null }
+
+    const param = parser.parse(input, specs)
+    expect(param).eql(expectedParam)
+    
+    done()
+  })
+
+  it('Should parse optional param (undefined value) passed', (done) => {
+    const specs = { a:[] }
+    const input = { a: undefined }
+    const expectedParam = { a: undefined }
 
     const param = parser.parse(input, specs)
     expect(param).eql(expectedParam)
