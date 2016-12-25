@@ -93,7 +93,8 @@ const specs = {
 const specs = {
     gender: [ 'required', /^(M|F|m|f)$/, String.prototype.toLowerCase ] /* format value to lower case */,
     language: [ String.prototype.toUpperCase ] /* format value to upper case */,
-    amount: [ parseFloat ] /* format value to float */
+    amount: [ parseFloat ] /* format value to float */,
+    name: [ 'required', String.prototype.toLowerCase, String.prototype.trim ] /* format toLowerCase and then trim */
 }
 ```
 

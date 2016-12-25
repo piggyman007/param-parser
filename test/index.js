@@ -263,4 +263,15 @@ describe('param-parser', () => {
     
     done()
   })
+
+  it('Should format param with multiple functions', (done) => {
+    const specs = { a: [ 'required', String.prototype.trim, String.prototype.toLowerCase ] }
+    const input = { a: ' Hello WoRlD ' }
+    const expectedParam = { a: 'hello world' }
+
+    const param = parser.parse(input, specs)
+    expect(param).eql(expectedParam)
+    
+    done()
+  })
 })
