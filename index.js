@@ -35,13 +35,6 @@ module.exports = {
       return formatInvalidRegexError(key)
     }
   },
-  _checkNeedBy(needs, param) {
-    return _.compact(_.map(needs, need => {
-      if (!param[need]) {
-        return formatMissedKeyError(need)
-      }  
-    }))
-  },
   _transform(param, specs) {
     const keys = Object.keys(specs)
     keys.forEach(key => {
@@ -99,20 +92,8 @@ module.exports = {
         })
         return results
       }).call(this))
-      
-      const need = _.flatten((() => {
-        const results = []
-        const keys = Object.keys(specs)
-        keys.forEach(key => {
-          const val = specs[key]
-          if (val.findIndex(v => Array.isArray(v)) > -1 && param[key]) {
-            results.push(this._checkNeedBy(val[val.findIndex(v => Array.isArray(v))], param))
-          }
-        })
-        return results
-      }).call(this))
-      
-      const allMissed = _.union(missed, need)
+
+      const allMissed = missed
       if (allMissed.length > 0) {
         throw new ValidateError(allMissed)
       }
