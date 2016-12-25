@@ -61,7 +61,7 @@ module.exports = {
     })
 
     keys.forEach(key => {
-      const todo = _.remove(specs[key], spec => _.isFunction(spec))
+      const todo = _.remove(specs[key], spec => typeof(spec) === 'function')
       _.forEach(todo, fn => {
         if (_.isNative(fn) && param[key] !== undefined) {
           try { param[key] = fn(param[key]) }
