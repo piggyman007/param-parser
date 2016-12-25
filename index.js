@@ -46,7 +46,7 @@ module.exports = {
 
     keys.forEach(key => {
       const todo = _.remove(specs[key], spec => typeof(spec) === 'function')
-      _.forEach(todo, fn => {
+      todo.forEach(fn => {
         if (param[key] !== undefined) {
           try { param[key] = fn(param[key]) }
           catch(e) { param[key] = fn.apply(param[key]) }

@@ -1,0 +1,68 @@
+{
+	"version": "1.0.0",
+	"configurations": [
+		{
+			"name": "app",
+			"type": "node",
+			"request": "launch",
+			"program": "${workspaceRoot}/index.js",
+			"stopOnEntry": false,
+			"args": [],
+			"cwd": "${workspaceRoot}",
+			"preLaunchTask": null,
+			"runtimeExecutable": null,
+			"runtimeArgs": [
+				"--nolazy"
+			],
+			"env": {
+				"NODE_ENV": "local"
+			},
+			"externalConsole": false,
+			"sourceMaps": false,
+			"outDir": null
+		},
+		{
+      "name": "mocha",
+      "type": "node",
+      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+      "stopOnEntry": false,
+      "args": [],
+      "runtimeArgs": [
+      ],
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": null
+    },
+    {
+      "name": "coverage",
+      "type": "node",
+      "program": "${workspaceRoot}/node_modules/istanbul/lib/cli.js",
+      "stopOnEntry": false,
+      "args": [
+        "cover",
+        "_mocha",
+        "--",
+        "--recursive"
+        ],
+      "runtimeArgs": [
+      ],
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": null,
+      "env": {
+        "NODE_ENV": "local"
+      }
+    },
+    {
+      "name": "gulp",
+      "type": "node",
+      // "program": "${workspaceRoot}/node_modules/gulp/bin/gulp.js",
+      "program": "/usr/local/bin/gulp",
+      "stopOnEntry": false,
+      "args": ["default"], //you can specify paths to specific tests here
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": null,
+      "env": {
+        "NODE_ENV": "development"
+      }
+    }
+	]
+}
