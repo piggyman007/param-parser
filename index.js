@@ -42,15 +42,6 @@ module.exports = {
       }  
     }))
   },
-  _trim(obj) {
-    if (typeof(obj) === 'string') {
-      return obj.trim()
-    } 
-    return _.each(obj, (v, k) => {
-      try { return v.toString().trim() } 
-      catch (e) { console.log('') }
-    })
-  },
   _transform(param, specs) {
     const keys = Object.keys(specs)
     keys.forEach(key => {
