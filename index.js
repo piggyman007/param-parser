@@ -81,17 +81,19 @@ module.exports = {
     }
     
     try {
-      const missed = _.compact((() => {
+      const missed = (() => {
         const results = []
         const keys = Object.keys(specs)
+
         keys.forEach(key => {
           const val = specs[key]
           if (val.indexOf('required') >= 0) {
             results.push(this._checkRequired(key, param[key]))
           }
         })
-        return results
-      }).call(this))
+
+        return results.filter(item => item) // remove falsy value (false, null, 0, "", undefined and NaN)
+      }).call(this)
 
       const allMissed = missed
       if (allMissed.length > 0) {
@@ -99,15 +101,19 @@ module.exports = {
       }
       param = this._removeUnnecessaryKeys(param, Object.keys(specs))
       param = this._assignDefaultValue(param, Object.keys(specs), defaultValue)
-      const failed = _.compact((() => {
+
+      const failed = (() => {
         const results = []
         const keys = Object.keys(specs)
+        
         keys.forEach(key => {
           const val = specs[key]
           results.push(this._checkSpec(key, param[key], val))
         })
-        return results
-      }).call(this))
+
+        return results.filter(item => item) // remove falsy value (false, null, 0, "", undefined and NaN)
+      }).call(this)
+
       if (failed.length > 0) {
         throw new ValidateError(failed)
       }
