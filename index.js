@@ -1,6 +1,5 @@
 'use strict'
 
-const _ = require('lodash')
 const ValidateError = require('./validateError')
 
 function formatMissedKeyError(key) {
@@ -45,7 +44,8 @@ module.exports = {
     })
 
     keys.forEach(key => {
-      const todo = _.remove(specs[key], spec => typeof(spec) === 'function')
+      const todo = specs[key].filter(spec => typeof(spec) === 'function')
+
       todo.forEach(fn => {
         if (param[key] !== undefined) {
           try { param[key] = fn(param[key]) }
@@ -53,6 +53,7 @@ module.exports = {
         }
       })
     })
+
     return param
   },
   _assignDefaultValue(param, specKeys, defaultValue) {
@@ -105,7 +106,7 @@ module.exports = {
       const failed = (() => {
         const results = []
         const keys = Object.keys(specs)
-        
+
         keys.forEach(key => {
           const val = specs[key]
           results.push(this._checkSpec(key, param[key], val))
