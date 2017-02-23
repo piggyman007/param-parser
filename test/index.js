@@ -290,7 +290,7 @@ describe('param-parser', () => {
 
   it('Should parse array (required) pass', (done) => {
     const regex = /^(YES|NO)$/
-    const regexpItems = new parser.RegExpItems(regex, 3)
+    const regexpItems = new parser.RegExpItems(regex)
     const specs = {
       status: [ 'required' ],
       result: [ 'required', regexpItems ]
@@ -312,7 +312,7 @@ describe('param-parser', () => {
 
   it('Should parse array (optional) pass', (done) => {
     const regex = /^(a|b|c)$/
-    const regexpItems = new parser.RegExpItems(regex, 3)
+    const regexpItems = new parser.RegExpItems(regex)
     const specs = { a: [ regexpItems ] }
     const input = { a: ['a', 'c', 'b'] }
     const expectedParam = { a: ['a', 'c', 'b'] }
@@ -325,7 +325,7 @@ describe('param-parser', () => {
 
   it('Should parse array (optional) failed with error "invalid regex"', (done) => {
     const regex = 'ok'
-    const regexpItems = new parser.RegExpItems(regex, 3)
+    const regexpItems = new parser.RegExpItems(regex)
     const specs = { a: [ regexpItems ] }
     const input = { a: ['a', 'c', 'b'] }
     const expectedParam = { a: ['a', 'c', 'b'] }
@@ -337,37 +337,9 @@ describe('param-parser', () => {
     }
   })
 
-  it('Should parse array (optional) failed with error "invalid spec length"', (done) => {
-    const regex = /^(a|b|c)$/
-    const regexpItems = new parser.RegExpItems(regex)
-    const specs = { a: [ regexpItems ] }
-    const input = { a: ['a', 'c', 'b'] }
-    const expectedParam = { a: ['a', 'c', 'b'] }
-
-    try { parser.parse(input, specs) }
-    catch (e) {
-      expect(e.message[0].search('invalid spec length')).eql(0)
-      done()
-    }
-  })
-
-  it('Should parse array (optional) failed with error "specs length is not equal to value length"', (done) => {
-    const regex = /^(a|b|c)$/
-    const regexpItems = new parser.RegExpItems(regex, 2)
-    const specs = { a: [ regexpItems ] }
-    const input = { a: ['a', 'c', 'b'] }
-    const expectedParam = { a: ['a', 'c', 'b'] }
-
-    try { parser.parse(input, specs) }
-    catch (e) {
-      expect(e.message[0].search('')).eql(0)
-      done()
-    }
-  })
-
   it('Should parse array (optional) failed with error "Invalid a format"', (done) => {
     const regex = /^(a|b|c)$/
-    const regexpItems = new parser.RegExpItems(regex, 3)
+    const regexpItems = new parser.RegExpItems(regex)
     const specs = { a: [ regexpItems ] }
     const input = { a: ['a', 'c', 'xxx'] }
     const expectedParam = { a: ['a', 'c', 'b'] }

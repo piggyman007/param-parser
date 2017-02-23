@@ -4,20 +4,13 @@ const paramParser = require('.')
 
 
 class  RegExpItems {
-  constructor(regex, length) {
+  constructor(regex) {
     this.regex = regex
-    this.length = length
   }
 
   parse(key, val) {
     if ((this.regex instanceof RegExp) === false) {
       return `invalid regex (${this.regex})`
-    }
-    if (!this.length) {
-      return `invalid spec length (${this.length})`
-    }
-    if (val.length !== this.length) {
-      return `specs length is not equal to value length`
     }
 
     for (const item of val) {
