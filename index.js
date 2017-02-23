@@ -30,7 +30,7 @@ function _removeUnnecessaryKeys(param, accept) {
   return result
 }
 
-function _checkSpec(key, val, spec) {
+function _checkSpec(key, val, spec, defaultValue) {
   // handle RegExpItems
   const regexItems = spec[spec.findIndex(item => (item instanceof RegExpItems))]
   if (regexItems) {
@@ -38,10 +38,10 @@ function _checkSpec(key, val, spec) {
   }
 
   // handle RegExpItems
-  const regexJsonItems = spec[spec.findIndex(item => (item instanceof RegexpJsonItems))]
-  if (regexJsonItems) {
-    return regexJsonItems.parse(key, val, parse)
-  }
+  // const regexJsonItems = spec[spec.findIndex(item => (item instanceof RegexpJsonItems))]
+  // if (regexJsonItems) {
+  //   return regexJsonItems.parse(key, val, parse, defaultValue)
+  // }
   
   const _regex = spec[spec.findIndex(item => (item instanceof RegExp))]
   const regex = _regex ? _regex : /.+/
@@ -117,13 +117,13 @@ function getMissItems(param, specs) {
   return results.filter(item => item) // remove falsy value (false, null, 0, "", undefined and NaN)
 }
 
-function getFailedItems(param, specs) {
+function getFailedItems(param, specs, defaultValue) {
   const results = []
   const keys = Object.keys(specs)
 
   keys.forEach(key => {
     const val = specs[key]
-    results.push(_checkSpec(key, param[key], val))
+    results.push(_checkSpec(key, param[key], val, defaultValue))
   })
 
   return results.filter(item => item) // remove falsy value (false, null, 0, "", undefined and NaN)
@@ -150,7 +150,7 @@ function parse (param, specs, defaultValue) {
     param = _removeUnnecessaryKeys(param, Object.keys(specs))
     param = _assignDefaultValue(param, Object.keys(specs), defaultValue)
 
-    const failed = getFailedItems(param, specs)
+    const failed = getFailedItems(param, specs, defaultValue)
     if (failed.length > 0) {
       throw new ValidateError(failed)
     }

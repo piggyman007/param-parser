@@ -288,7 +288,7 @@ describe('param-parser', () => {
 
   it('Should parse array (required) pass', (done) => {
     const regex = /^(a|b|c)$/
-    const regexpItems = new parser.RegExpItems(regex, 3)
+    const regexpItems = new parser.RegExpItems(regex)
     const specs = { a: [ 'required', regexpItems ] }
     const input = { a: ['a', 'c', 'b'] }
     const expectedParam = { a: ['a', 'c', 'b'] }
@@ -334,6 +334,33 @@ describe('param-parser', () => {
     done()
   })
 
+  it('Should parse array (optional) with function format pass', (done) => {
+    const regex = /^(a|b|c)$/
+    const regexpItems = new parser.RegExpItems(regex)
+    const specs = { a: [ regexpItems, String.prototype.toUpperCase ] }
+    const input = { a: ['a', 'c', 'b'] }
+    const expectedParam = { a: ['A', 'C', 'B'] }
+
+    const param = parser.parse(input, specs)
+    expect(param).eql(expectedParam)
+    
+    done()
+  })
+
+  it('Should parse array (optional) with defaultValue pass', (done) => {
+    const regex = /^(a|b|c)$/
+    const regexpItems = new parser.RegExpItems(regex)
+    const specs = { a: [ regexpItems ] }
+    const input = {}
+    const defaultValue = { a: ['b'] }
+    const expectedParam = { a: ['b'] }
+
+    const param = parser.parse(input, specs, defaultValue)
+    expect(param).eql(expectedParam)
+    
+    done()
+  })
+
   it('Should parse array (optional) failed with error "invalid regex"', (done) => {
     const regex = 'ok'
     const regexpItems = new parser.RegExpItems(regex)
@@ -364,8 +391,8 @@ describe('param-parser', () => {
 
   it.skip('Should parse array of objects (required) pass', (done) => {
     const userSpecs = {
-      name: [ 'required' ],
-      language: [ 'required', /^(EN|TH)$/ ]
+      name: [ 'required', String.prototype.toUpperCase, String.prototype.trim ],
+      language: [ 'required', /^(EN|TH)$/]
     }
     const regexpJsonItems = new parser.RegexpJsonItems(userSpecs)
     const specs = {
@@ -374,18 +401,26 @@ describe('param-parser', () => {
     const input = {
       users: [
         {
-          name: 'user1',
+          name: 'user1 ',
           language: 'EN'
         },
         {
-          name: 'user2',
+          name: ' user2',
           language: 'TH'
         }
       ]
     }
     const expectedParam = {
-      status: true,
-      result: ['YES', 'YES', 'NO']
+      users: [
+        {
+          name: 'USER1',
+          language: 'EN'
+        },
+        {
+          name: 'USER2',
+          language: 'TH'
+        }
+      ]
     }
 
     const param = parser.parse(input, specs)
