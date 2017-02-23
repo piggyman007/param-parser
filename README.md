@@ -148,7 +148,7 @@ console.log(param)
 
 ```javascript
 const regex = /^(YES|NO)$/
-const regexpItems = new parser.RegExpItems(regex, 3)
+const regexpItems = new parser.RegExpItems(regex)
 const specs = {
     status: [ 'required' ],
     result: [ 'required', regexpItems ]
