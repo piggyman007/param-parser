@@ -40,13 +40,22 @@ function _checkSpec(key, val, spec) {
   // handle RegExpItems
   const regexJsonItems = spec[spec.findIndex(item => (item instanceof RegexpJsonItems))]
   if (regexJsonItems) {
-    // return regexJsonItems.parse(key, val, this.parse)
+    return regexJsonItems.parse(key, val, parse)
   }
   
   const _regex = spec[spec.findIndex(item => (item instanceof RegExp))]
   const regex = _regex ? _regex : /.+/
   if (val !== null && val !== undefined && val !== '' && !regex.test(val)) {
     return formatInvalidRegexError(key)
+  }
+}
+
+function _formatParamItem(item, fn) {
+  try { 
+    return fn(item) 
+  }
+  catch(e) { 
+    return fn.apply(item) 
   }
 }
 
@@ -64,8 +73,16 @@ function _transform(param, specs) {
 
     todo.forEach(fn => {
       if (param[key] !== undefined) {
-        try { param[key] = fn(param[key]) }
-        catch(e) { param[key] = fn.apply(param[key]) }
+        if (Array.isArray(param[key])) {
+          const newParam = []
+          for (const paramItem of param[key]) {
+            newParam.push(_formatParamItem(paramItem, fn))
+          }
+          param[key] = newParam
+        }
+        else {
+          param[key] = _formatParamItem(param[key], fn)
+        }
       }
     })
   })
