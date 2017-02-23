@@ -1,6 +1,7 @@
 'use strict'
 
 const ValidateError = require('./validateError')
+const RegExpItems = require('./regexpItems')
 
 function formatMissedKeyError(key) {
   return `${key} is required`
@@ -11,6 +12,7 @@ function formatInvalidRegexError(key) {
 }
 
 module.exports = {
+  RegExpItems,
   _checkRequired(key, param) {
     if (param === null || param === undefined) {
       return formatMissedKeyError(key)
@@ -28,10 +30,17 @@ module.exports = {
     return result
   },
   _checkSpec(key, val, spec) {
-    const _regex = spec[spec.findIndex(item => (item instanceof RegExp))]
-    const regex = _regex ? _regex : /.+/
-    if (val !== null && val !== undefined && val !== '' && !regex.test(val)) {
-      return formatInvalidRegexError(key)
+    // handle RegExpItems
+    const regexItems = spec[spec.findIndex(item => (item instanceof RegExpItems))]
+    if (regexItems) {
+      return regexItems.parse(key, val)
+    }
+    else {
+      const _regex = spec[spec.findIndex(item => (item instanceof RegExp))]
+      const regex = _regex ? _regex : /.+/
+      if (val !== null && val !== undefined && val !== '' && !regex.test(val)) {
+        return formatInvalidRegexError(key)
+      }
     }
   },
   _transform(param, specs) {

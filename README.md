@@ -144,6 +144,30 @@ const param = parser.parse(input, specs) // parse input
 console.log(param)
 ```
 
+* support array parameter, e.g., 
+
+```javascript
+const regex = /^(YES|NO)$/
+const regexpItems = new parser.RegExpItems(regex, 3)
+const specs = {
+    status: [ 'required' ],
+    result: [ 'required', regexpItems ]
+}
+const input = {
+    status: true,
+    result: ['YES', 'YES', 'NO']
+}
+
+const param = parser.parse(input, specs)
+
+/** will print
+  * {
+  *   status: true,
+  *   result: ['YES', 'YES', 'NO']
+  *  }
+  */
+```
+
 License
 ----
 
