@@ -1,8 +1,5 @@
 'use strict'
 
-const paramParser = require('.')
-
-
 class  RegExpItems {
   constructor(regex) {
     this.regex = regex

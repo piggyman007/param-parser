@@ -216,6 +216,17 @@ describe('param-parser', () => {
     done()
   })
 
+  it('Should parse optional param with prototype toUpperCase passed (optional param is undefined)', (done) => {
+    const specs = { a: [String.prototype.toUpperCase] }
+    const input = {}
+    const expectedParam = {}
+
+    const param = parser.parse(input, specs)
+    expect(param).eql(expectedParam)
+    
+    done()
+  })
+
   it('Should parse required param with prototype Number passed', (done) => {
     const specs = { a: ['required', Number] }
     const input = { a: '10.10' }
@@ -349,5 +360,37 @@ describe('param-parser', () => {
       expect(e.message[0].search('Invalid a format')).eql(0)
       done()
     }
+  })
+
+  it.skip('Should parse array of objects (required) pass', (done) => {
+    const userSpecs = {
+      name: [ 'required' ],
+      language: [ 'required', /^(EN|TH)$/ ]
+    }
+    const regexpJsonItems = new parser.RegexpJsonItems(userSpecs)
+    const specs = {
+      users: [ 'required', regexpJsonItems ]
+    }
+    const input = {
+      users: [
+        {
+          name: 'user1',
+          language: 'EN'
+        },
+        {
+          name: 'user2',
+          language: 'TH'
+        }
+      ]
+    }
+    const expectedParam = {
+      status: true,
+      result: ['YES', 'YES', 'NO']
+    }
+
+    const param = parser.parse(input, specs)
+    expect(param).eql(expectedParam)
+    
+    done()
   })
 })
