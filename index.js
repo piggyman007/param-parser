@@ -61,17 +61,11 @@ function _formatParamItem(item, fn) {
 
 function _transform(param, specs) {
   const keys = Object.keys(specs)
-  // keys.forEach(key => {
-  //   const patterns = specs[key]
-  //   if (patterns.indexOf('notrim') < 0) {
-  //     specs[key].push(String.prototype.trim)
-  //   }
-  // })
 
-  keys.forEach(key => {
+  for (const key of keys) {
     const todo = specs[key].filter(spec => typeof(spec) === 'function')
-
-    todo.forEach(fn => {
+    
+    for (const fn of todo) {
       if (param[key] !== undefined) {
         if (Array.isArray(param[key])) {
           const newParam = []
@@ -84,8 +78,8 @@ function _transform(param, specs) {
           param[key] = _formatParamItem(param[key], fn)
         }
       }
-    })
-  })
+    }
+  }
 
   return param
 }
@@ -121,10 +115,10 @@ function getFailedItems(param, specs, defaultValue) {
   const results = []
   const keys = Object.keys(specs)
 
-  keys.forEach(key => {
+  for (const key of keys) {
     const val = specs[key]
     results.push(_checkSpec(key, param[key], val, defaultValue))
-  })
+  }
 
   return results.filter(item => item) // remove falsy value (false, null, 0, "", undefined and NaN)
 }
