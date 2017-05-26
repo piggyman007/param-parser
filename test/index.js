@@ -56,6 +56,7 @@ describe('param-parser', () => {
 
     try { parser.parse(input, specs) }
     catch (e) {
+      expect(e.errorType).eql('missing field(s)')
       expect(e.constructor.name).eql('ValidateError')
       done()
     }
@@ -67,6 +68,7 @@ describe('param-parser', () => {
 
     try { parser.parse(input, specs) }
     catch (e) {
+      expect(e.errorType).eql('missing field(s)')
       expect(e.constructor.name).eql('ValidateError')
       done()
     }
@@ -75,12 +77,12 @@ describe('param-parser', () => {
   it('Should parse required param failed', (done) => {
     const specs = { a: ['required'] }
     const input = { }
-    const expectedParam = { a: 'test' }
 
     try {
       const param = parser.parse(input, specs)
     }
     catch (e) {
+      expect(e.errorType).eql('missing field(s)')
       expect(e.constructor.name).eql('ValidateError')
     }
     
@@ -145,12 +147,12 @@ describe('param-parser', () => {
   it('Should parse required param with regex failed', (done) => {
     const specs = { a: ['required', /^[01]$/] }
     const input = { a: '0' }
-    const expectedParam = { a: '0' }
 
     try {
       const param = parser.parse(input, specs)
     }
-    catch (e) {s
+    catch (e) {
+      expect(e.errorType).eql('incorrect format')
       expect(e.constructor.name).eql('ValidateError')
     }
     
@@ -171,12 +173,12 @@ describe('param-parser', () => {
   it('Should parse optional param with regex failed', (done) => {
     const specs = { a: [/^[01]$/] }
     const input = { a: '0' }
-    const expectedParam = { a: '0' }
 
     try {
       const param = parser.parse(input, specs)
     }
-    catch (e) {s
+    catch (e) {
+      expect(e.errorType).eql('incorrect format')
       expect(e.constructor.name).eql('ValidateError')
     }
     

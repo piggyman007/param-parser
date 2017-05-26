@@ -139,14 +139,14 @@ function parse (param, specs, defaultValue) {
   try {
     const allMissed = getMissItems(param, specs)
     if (allMissed.length > 0) {
-      throw new ValidateError(allMissed)
+      throw new ValidateError(allMissed, ValidateError.errorType.MISSING)
     }
     param = _removeUnnecessaryKeys(param, Object.keys(specs))
     param = _assignDefaultValue(param, Object.keys(specs), defaultValue)
 
     const failed = getFailedItems(param, specs, defaultValue)
     if (failed.length > 0) {
-      throw new ValidateError(failed)
+      throw new ValidateError(failed, ValidateError.errorType.INCORRECT_FORMAT)
     }
     return _transform(param, specs)
   }
@@ -155,7 +155,7 @@ function parse (param, specs, defaultValue) {
       throw err
     }
     else {
-      throw new ValidateError(err.message || err)
+      throw new ValidateError(err.message || err, ValidateError.errorType.OTHER)
     }
   }
 }
